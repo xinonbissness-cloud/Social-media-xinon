@@ -1,65 +1,44 @@
 import os
-import smtplib
+import requests
 
 
 def send_verification_email(to_email, verification_code):
+    resend_api_key = os.environ.get("RESEND_API_KEY")
 
-    gmail_address = os.environ.get("GMAIL_ADDRESS")
-    gmail_app_password = os.environ.get("GMAIL_APP_PASSWORD")
+    if not resend_api_key:
+        raise RuntimeError("RESEND_API_KEY is missing")
 
-    print(
-        "GMAIL_ADDRESS PRESENT:",
-        bool(gmail_address),
-        flush=True
+    sender_email = "onboarding@resend.dev"
+
+    email_data = {
+        "from": sender_email,
+        "to": [to_email],
+        "subject": "Xinon Social - Email Verification Code",
+        "html": f"""
+        <div style="font-family: Arial, sans-serif;">
+            <h2>Xinon Social</h2>
+            <p>Your email verification code is:</p>
+            <h1>{verification_code}</h1>
+            <p>Please enter this code in Xinon Social to verify your email.</p>
+        </div>
+        """
+    }
+
+    headers = {
+        "Authorization": f"Bearer {resend_api_key}",
+        "Content-Type": "application/json"
+    }
+
+    response = requests.post(
+        "https://api.resend.com/emails",
+        json=email_data,
+        headers=headers,
+        timeout=30
     )
 
-    print(
-        "GMAIL_APP_PASSWORD PRESENT:",
-        bool(gmail_app_password),
-        flush=True
-    )
-
-    if not gmail_address:
-        raise RuntimeError("GMAIL_ADDRESS is missing")
-
-    if not gmail_app_password:
-        raise RuntimeError("GMAIL_APP_PASSWORD is missing")
-
-    gmail_app_password = gmail_app_password.replace(" ", "")
-
-    try:
-        with smtplib.SMTP(
-            "smtp.gmail.com",
-            587,
-            timeout=30
-        ) as server:
-
-            server.ehlo()
-            server.starttls()
-            server.ehlo()
-
-            server.login(
-                gmail_address,
-                gmail_app_password
-            )
-
-            print(
-                "GMAIL LOGIN SUCCESS",
-                flush=True
-            )
-
-    except Exception as error:
-
-        print(
-            "GMAIL LOGIN FAILED:",
-            type(error).__name__,
-            str(error),
-            flush=True
+    if response.status_code >= 400:
+        raise RuntimeError(
+            f"Resend API error: {response.status_code} {response.text}"
         )
 
-        raise
-
-    print(
-        "GMAIL LOGIN TEST PASSED",
-        flush=True
-        )
+    print("RESEND EMAIL SENT:", response.text, flush=True)
