@@ -1,10 +1,15 @@
 from flask import Flask
+from flask_cors import CORS
+
 from config import Config
 from models.user import db
 from routes.auth import auth_bp
 
+
 app = Flask(__name__)
 app.config.from_object(Config)
+
+CORS(app)
 
 db.init_app(app)
 
@@ -21,4 +26,7 @@ with app.app_context():
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+    app.run(
+        host="0.0.0.0",
+        port=5000
+    )
