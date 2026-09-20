@@ -1,8 +1,10 @@
-from datetime import datetime
+from datetime import datetime, timedelta
+import secrets
 
 from flask import Blueprint, request, jsonify
 
 from models.user import db, User
+from services.email import send_verification_email
 
 
 auth_bp = Blueprint("auth", __name__)
@@ -51,12 +53,17 @@ def register():
             "error": "Username already exists"
         }), 409
 
+    verification_code = str(secrets.randbelow(1000000)).zfill(6)
+
     user = User(
         name=name,
         birthday=birthday,
         gender=gender,
         username=username,
-        email=email
+        email=email,
+        email_verified=False,
+        verification_code=verification_code,
+        verification_expires=datetime.utcnow() + timedelta(minutes=10)
     )
 
     user.set_password(password)
@@ -64,10 +71,72 @@ def register():
     db.session.add(user)
     db.session.commit()
 
+    try:
+        send_verification_email(
+            email,
+            verification_code
+        )
+    except Exception:
+        db.session.delete(user)
+        db.session.commit()
+
+        return jsonify({
+            "error": "Could not send verification email"
+        }), 500
+
     return jsonify({
-        "message": "Account created successfully",
-        "user_id": user.id
+        "message": "Verification code sent to your email"
     }), 201
+
+
+@auth_bp.route("/verify-email", methods=["POST"])
+def verify_email():
+    data = request.get_json(silent=True) or {}
+
+    email = data.get("email")
+    code = data.get("code")
+
+    if not email or not code:
+        return jsonify({
+            "error": "Email and verification code are required"
+        }), 400
+
+    user = User.query.filter_by(email=email).first()
+
+    if not user:
+        return jsonify({
+            "error": "User not found"
+        }), 404
+
+    if user.email_verified:
+        return jsonify({
+            "message": "Email already verified"
+        }), 200
+
+    if not user.verification_code:
+        return jsonify({
+            "error": "No verification code found"
+        }), 400
+
+    if user.verification_expires < datetime.utcnow():
+        return jsonify({
+            "error": "Verification code has expired"
+        }), 400
+
+    if user.verification_code != code:
+        return jsonify({
+            "error": "Invalid verification code"
+        }), 400
+
+    user.email_verified = True
+    user.verification_code = None
+    user.verification_expires = None
+
+    db.session.commit()
+
+    return jsonify({
+        "message": "Email verified successfully"
+    }), 200
 
 
 @auth_bp.route("/login", methods=["POST"])
@@ -88,6 +157,11 @@ def login():
         return jsonify({
             "error": "Invalid email or password"
         }), 401
+
+    if not user.email_verified:
+        return jsonify({
+            "error": "Please verify your email first"
+        }), 403
 
     return jsonify({
         "message": "Login successful",
