@@ -12,6 +12,8 @@ auth_bp = Blueprint("auth", __name__)
 
 @auth_bp.route("/register", methods=["POST"])
 def register():
+    print("REGISTER ROUTE HIT", flush=True)
+
     data = request.get_json(silent=True) or {}
 
     name = data.get("name")
@@ -21,6 +23,8 @@ def register():
     email = data.get("email")
     password = data.get("password")
 
+    print("REGISTER DATA RECEIVED", flush=True)
+
     if not all([
         name,
         birthday_text,
@@ -29,6 +33,8 @@ def register():
         email,
         password
     ]):
+        print("REGISTER VALIDATION FAILED", flush=True)
+
         return jsonify({
             "error": "All fields are required"
         }), 400
@@ -38,22 +44,31 @@ def register():
             birthday_text,
             "%Y-%m-%d"
         ).date()
+
     except ValueError:
+        print("BIRTHDAY FORMAT ERROR", flush=True)
+
         return jsonify({
             "error": "Birthday must use YYYY-MM-DD format"
         }), 400
 
     if User.query.filter_by(email=email).first():
+        print("EMAIL ALREADY EXISTS", flush=True)
+
         return jsonify({
             "error": "Email already exists"
         }), 409
 
     if User.query.filter_by(username=username).first():
+        print("USERNAME ALREADY EXISTS", flush=True)
+
         return jsonify({
             "error": "Username already exists"
         }), 409
 
-    verification_code = str(secrets.randbelow(1000000)).zfill(6)
+    verification_code = str(
+        secrets.randbelow(1000000)
+    ).zfill(6)
 
     user = User(
         name=name,
@@ -71,18 +86,33 @@ def register():
     db.session.add(user)
     db.session.commit()
 
+    print("USER CREATED IN DATABASE", flush=True)
+    print("ABOUT TO CALL SEND_VERIFICATION_EMAIL", flush=True)
+
     try:
         send_verification_email(
             email,
             verification_code
         )
-    except Exception:
+
+        print("SEND_VERIFICATION_EMAIL RETURNED", flush=True)
+
+    except Exception as error:
+        print(
+            "SEND_VERIFICATION_EMAIL ERROR:",
+            type(error).__name__,
+            str(error),
+            flush=True
+        )
+
         db.session.delete(user)
         db.session.commit()
 
         return jsonify({
             "error": "Could not send verification email"
         }), 500
+
+    print("REGISTER SUCCESS", flush=True)
 
     return jsonify({
         "message": "Verification code sent to your email"
