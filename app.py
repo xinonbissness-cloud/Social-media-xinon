@@ -1,47 +1,199 @@
-import os
+from datetime import datetime, timedelta
+import secrets
 
-from flask import Flask
-from flask_cors import CORS
-from sqlalchemy import text
+from flask import Blueprint, request, jsonify
 
-from config import Config
-from models.user import db
-from routes.auth import auth_bp
+from models.user import db, User
+from services.email import send_verification_email
 
 
-app = Flask(__name__)
-app.config.from_object(Config)
-
-CORS(app)
-
-db.init_app(app)
-
-app.register_blueprint(auth_bp, url_prefix="/api/auth")
+auth_bp = Blueprint("auth", __name__)
 
 
-@app.route("/")
-def home():
-    return "Xinon Social Backend is running!"
+@auth_bp.route("/register", methods=["POST"])
+def register():
 
+    data = request.get_json(silent=True) or {}
 
-with app.app_context():
+    name = data.get("name")
+    birthday_text = data.get("birthday")
+    gender = data.get("gender")
+    username = data.get("username")
+    email = data.get("email")
+    password = data.get("password")
 
-    # One-time database reset.
-    # Set RESET_DATABASE=true in Railway Variables
-    # only when you want to rebuild the database.
-    if os.environ.get("RESET_DATABASE", "").lower() == "true":
+    if not all([
+        name,
+        birthday_text,
+        gender,
+        username,
+        email,
+        password
+    ]):
+        return jsonify({
+            "error": "All fields are required"
+        }), 400
 
-        db.session.execute(
-            text("DROP TABLE IF EXISTS users CASCADE")
+    try:
+
+        birthday = datetime.strptime(
+            birthday_text,
+            "%Y-%m-%d"
+        ).date()
+
+    except ValueError:
+
+        return jsonify({
+            "error": "Birthday must use YYYY-MM-DD format"
+        }), 400
+
+    if User.query.filter_by(email=email).first():
+
+        return jsonify({
+            "error": "Email already exists"
+        }), 409
+
+    if User.query.filter_by(username=username).first():
+
+        return jsonify({
+            "error": "Username already exists"
+        }), 409
+
+    verification_code = str(
+        secrets.randbelow(1000000)
+    ).zfill(6)
+
+    user = User(
+        name=name,
+        birthday=birthday,
+        gender=gender,
+        username=username,
+        email=email,
+        email_verified=False,
+        verification_code=verification_code,
+        verification_expires=datetime.utcnow()
+        + timedelta(minutes=10)
+    )
+
+    user.set_password(password)
+
+    db.session.add(user)
+    db.session.commit()
+
+    try:
+
+        send_verification_email(
+            email,
+            verification_code
         )
 
+    except Exception as error:
+
+        print(
+            "EMAIL ERROR:",
+            type(error).__name__,
+            str(error)
+        )
+
+        db.session.delete(user)
         db.session.commit()
 
-    db.create_all()
+        return jsonify({
+            "error": "Could not send verification email",
+            "debug": type(error).__name__ + ": " + str(error)
+        }), 500
+
+    return jsonify({
+        "message": "Verification code sent to your email"
+    }), 201
 
 
-if __name__ == "__main__":
-    app.run(
-        host="0.0.0.0",
-        port=5000
-    )
+@auth_bp.route("/verify-email", methods=["POST"])
+def verify_email():
+
+    data = request.get_json(silent=True) or {}
+
+    email = data.get("email")
+    code = data.get("code")
+
+    if not email or not code:
+
+        return jsonify({
+            "error": "Email and verification code are required"
+        }), 400
+
+    user = User.query.filter_by(email=email).first()
+
+    if not user:
+
+        return jsonify({
+            "error": "User not found"
+        }), 404
+
+    if user.email_verified:
+
+        return jsonify({
+            "message": "Email already verified"
+        }), 200
+
+    if not user.verification_code:
+
+        return jsonify({
+            "error": "No verification code found"
+        }), 400
+
+    if user.verification_expires < datetime.utcnow():
+
+        return jsonify({
+            "error": "Verification code has expired"
+        }), 400
+
+    if user.verification_code != code:
+
+        return jsonify({
+            "error": "Invalid verification code"
+        }), 400
+
+    user.email_verified = True
+    user.verification_code = None
+    user.verification_expires = None
+
+    db.session.commit()
+
+    return jsonify({
+        "message": "Email verified successfully"
+    }), 200
+
+
+@auth_bp.route("/login", methods=["POST"])
+def login():
+
+    data = request.get_json(silent=True) or {}
+
+    email = data.get("email")
+    password = data.get("password")
+
+    if not email or not password:
+
+        return jsonify({
+            "error": "Email and password are required"
+        }), 400
+
+    user = User.query.filter_by(email=email).first()
+
+    if not user or not user.check_password(password):
+
+        return jsonify({
+            "error": "Invalid email or password"
+        }), 401
+
+    if not user.email_verified:
+
+        return jsonify({
+            "error": "Please verify your email first"
+        }), 403
+
+    return jsonify({
+        "message": "Login successful",
+        "user_id": user.id
+    }), 200
