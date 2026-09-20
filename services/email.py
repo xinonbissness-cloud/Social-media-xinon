@@ -7,6 +7,18 @@ def send_verification_email(to_email, verification_code):
     gmail_address = os.environ.get("GMAIL_ADDRESS")
     gmail_app_password = os.environ.get("GMAIL_APP_PASSWORD")
 
+    print(
+        "GMAIL_ADDRESS PRESENT:",
+        bool(gmail_address),
+        flush=True
+    )
+
+    print(
+        "GMAIL_APP_PASSWORD PRESENT:",
+        bool(gmail_app_password),
+        flush=True
+    )
+
     if not gmail_address:
         raise RuntimeError("GMAIL_ADDRESS is missing")
 
@@ -16,7 +28,11 @@ def send_verification_email(to_email, verification_code):
     gmail_app_password = gmail_app_password.replace(" ", "")
 
     try:
-        with smtplib.SMTP("smtp.gmail.com", 587, timeout=30) as server:
+        with smtplib.SMTP(
+            "smtp.gmail.com",
+            587,
+            timeout=30
+        ) as server:
 
             server.ehlo()
             server.starttls()
@@ -46,4 +62,4 @@ def send_verification_email(to_email, verification_code):
     print(
         "GMAIL LOGIN TEST PASSED",
         flush=True
-    )
+        )
