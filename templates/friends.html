@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}Friends - Xinon Social{% endblock %}
+{% block content %}
+<section class="media-view" id="friendsView">
+<main class="feed friends-feed">
+<section class="friends-header">
+<div class="friends-header-row">
+<button class="friends-back-button" id="backFromFriendsButton" title="Back to Profile" type="button">
+                            ←
+                        </button>
+<h2>Friends</h2>
+</div>
+<div class="friends-actions">
+<button class="friends-action-button" id="findPeopleButton" type="button">
+                            🔎 Find People
+                        </button>
+<button class="friends-action-button secondary" id="friendRequestsButton" type="button">
+                            👥 Friend Requests
+                        </button>
+</div>
+</section>
+<section class="friends-section">
+<h3>Your Friends</h3>
+<div class="friend-list" id="friendList">
+<div class="friend-empty">
+<div class="friend-empty-icon">👥</div>
+<strong>No friends yet</strong>
+<p>When you add friends on Xinon, they will appear here.</p>
+</div>
+</div>
+</section>
+<section class="friends-section hidden" id="friendRequestsSection">
+<h3>Friend Requests</h3>
+<div class="friend-empty">
+<div class="friend-empty-icon">📨</div>
+<strong>No pending requests</strong>
+<p>New friend requests will appear here.</p>
+</div>
+</section>
+<section class="friends-section hidden" id="findPeopleSection">
+<h3>Find People</h3>
+<form class="friend-search-form" id="friendSearchForm">
+<input id="friendSearchInput" placeholder="Search people by name or username..." type="search"/>
+<button type="submit">Search</button>
+</form>
+<div id="peopleResults">
+<div class="friend-card">
+<div class="friend-avatar">X</div>
+<div class="friend-info">
+<strong>Xinon Community</strong>
+<small>People you may know will appear here.</small>
+</div>
+<button class="friend-button add-friend-demo" type="button">Add Friend</button>
+</div>
+</div>
+</section>
+</main>
+</section>
+{% endblock %}

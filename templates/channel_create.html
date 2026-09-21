@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Create Channel - Xinon Social{% endblock %}
+{% block content %}
+<section class="media-view" id="channelCreateView">
+<main class="feed">
+<section class="settings-header">
+<button class="back-settings-button" id="backFromChannelButton" type="button">‹</button>
+<div><h2>Create a Channel</h2><p>Complete every step to create your Xinon Channel.</p></div>
+</section>
+<section class="channel-wizard">
+<div class="wizard-step active" id="channelStep1">
+<h2 class="wizard-title">Channel details</h2>
+<p class="wizard-subtitle">Choose a name and decide who can access your Channel.</p>
+<label class="field-label" for="channelName">Channel name *</label>
+<input class="channel-input" id="channelName" maxlength="80" placeholder="Enter channel name" type="text"/>
+<label class="field-label">Visibility *</label>
+<div class="visibility-options">
+<label class="visibility-option">
+<input name="channelVisibility" type="radio" value="public"/>
+<span><strong>Public</strong><small>Anyone can discover and subscribe to this Channel.</small></span>
+</label>
+<label class="visibility-option">
+<input name="channelVisibility" type="radio" value="private"/>
+<span><strong>Private</strong><small>Only people with the private link can access it.</small></span>
+</label>
+</div>
+<div class="result-box error-text" id="channelStep1Error"></div>
+<div class="wizard-actions"><button class="primary-action" id="channelNextButton" type="button">Next</button></div>
+</div>
+<div class="wizard-step" id="channelStep2">
+<h2 class="wizard-title">Channel profile</h2>
+<p class="wizard-subtitle">A profile photo is required before the Channel can be created.</p>
+<div class="channel-photo-wrap">
+<img alt="Channel profile preview" class="channel-photo-preview" id="channelPhotoPreview"/>
+<input accept="image/png,image/jpeg,image/webp" id="channelPhotoInput" type="file"/>
+<div class="required-note">* Channel profile photo is required</div>
+</div>
+<div class="channel-summary" id="channelSummary"></div>
+<div class="result-box error-text" id="channelStep2Error"></div>
+<div class="wizard-actions">
+<button class="secondary-action" id="channelBackButton" type="button">Back</button>
+<button class="primary-action" disabled="" id="createChannelButton" type="button">Create Channel</button>
+</div>
+<div class="result-box" id="channelCreateResult"></div>
+</div>
+</section>
+</main>
+</section>
+{% endblock %}
