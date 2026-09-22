@@ -8,6 +8,10 @@ from routes.posts import posts_bp
 from models.post import Post
 from models.media import ProfileMedia, PostMedia
 from routes.profile import profile_bp
+from routes.share import share_bp
+from models.share import PostShare
+from routes.live import live_bp
+from models.live import LiveSession, LiveViewer, LiveComment, LiveReaction, LiveSignal
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -16,6 +20,8 @@ db.init_app(app)
 app.register_blueprint(auth_bp, url_prefix="/api/auth")
 app.register_blueprint(posts_bp, url_prefix="/api")
 app.register_blueprint(profile_bp, url_prefix="/api")
+app.register_blueprint(share_bp, url_prefix="/api")
+app.register_blueprint(live_bp, url_prefix="/api")
 
 @app.route("/")
 def root():
@@ -28,7 +34,7 @@ UI_ROUTES = {
     "/home":"home.html", "/reels":"reels.html", "/profile":"profile.html",
     "/friends":"friends.html", "/search":"search.html", "/notifications":"notifications.html",
     "/create-post":"create_post.html", "/share":"share.html", "/settings":"settings.html",
-    "/channel/create":"channel_create.html", "/terms":"terms.html"
+    "/channel/create":"channel_create.html", "/terms":"terms.html", "/live":"live.html"
 }
 for path, template in UI_ROUTES.items():
     app.add_url_rule(path, endpoint="ui_"+path.strip("/").replace("/","_"), view_func=lambda template=template: render_template(template))
@@ -38,4 +44,5 @@ with app.app_context():
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
-    
+
+
