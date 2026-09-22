@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Xinon Social — Live</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <header class="top-bar">
+    <div class="top-logo">XN</div>
+    <div class="top-actions"><button class="icon-button" id="liveBackButton" type="button">←</button></div>
+  </header>
+
+  <section class="media-view" id="liveView">
+    <main class="feed utility-feed live-page">
+      <section class="utility-card">
+        <div class="utility-header">
+          <button class="utility-back-button" id="liveBackButton2" type="button">←</button>
+          <div><h2>Live</h2><p id="liveStatusText">Start a live video or join an active live.</p></div>
+        </div>
+
+        <div id="liveLobby">
+          <input class="live-title-input" id="liveTitleInput" maxlength="200" placeholder="What do you want to talk about?">
+          <button class="publish-button" id="startLiveButton" type="button">🔴 Go Live</button>
+          <div id="activeLives" class="active-lives"></div>
+        </div>
+
+        <div id="liveRoom" class="hidden">
+          <div class="live-video-wrap">
+            <video id="liveRemoteVideo" class="live-video" autoplay playsinline controlslist="nodownload noplaybackrate"></video>
+            <video id="liveLocalVideo" class="live-local-video hidden" autoplay muted playsinline></video>
+            <div class="live-badge">🔴 LIVE <span id="liveViewerCount">0</span> viewers</div>
+          </div>
+          <div class="live-room-actions">
+            <button id="liveReactionButton" type="button">❤️ React</button>
+            <button id="liveShareButton" type="button">↗ Share</button>
+            <button id="endLiveButton" type="button">End Live</button>
+          </div>
+          <p id="liveRoomMessage" class="utility-message"></p>
+          <div id="liveComments" class="live-comments"></div>
+          <div class="live-comment-form">
+            <input id="liveCommentInput" maxlength="500" placeholder="Write a comment...">
+            <button id="liveCommentButton" type="button">Send</button>
+          </div>
+        </div>
+      </section>
+    </main>
+  </section>
+
+  <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Xinon Social — Share</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <header class="top-bar">
+    <div class="top-logo">XN</div>
+    <div class="top-actions">
+      <button class="icon-button" id="searchButton" title="Search" type="button">🔍</button>
+      <button class="icon-button" id="notificationsButton" title="Notifications" type="button">🔔</button>
+    </div>
+  </header>
+
+  <section class="media-view" id="shareView">
+    <main class="feed utility-feed">
+      <section class="utility-card">
+        <div class="utility-header">
+          <button class="utility-back-button" data-back-view="homeView" type="button">←</button>
+          <div>
+            <h2>Share</h2>
+            <p>Choose how you want to share this post.</p>
+          </div>
+        </div>
+
+        <div id="sharePostPreview" class="share-post-preview"></div>
+
+        <div class="share-options">
+          <button data-share-action="feed" type="button">📰 Share to your feed</button>
+          <button data-share-action="copy" type="button">🔗 Copy post link</button>
+          <button data-share-action="message" type="button">💬 Share in a message</button>
+        </div>
+        <p class="utility-message" id="shareResult"></p>
+      </section>
+    </main>
+  </section>
+
+  <nav class="bottom-nav">
+    <button class="nav-button active" data-view="homeView" type="button"><span class="nav-icon">🏠</span>Home</button>
+    <button class="nav-button" data-view="reelsView" type="button"><span class="nav-icon">🎬</span>Reels</button>
+    <button class="nav-button" data-view="profileView" type="button"><span class="nav-icon">👤</span>Profile</button>
+  </nav>
+
+  <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
