@@ -1,50 +1,45 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Xinon Social — Home</title>
-<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Xinon Social</title><link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-<header class="top-bar">
-    <div class="top-logo">XN</div>
-    <div class="top-actions">
-        <button class="icon-button" id="searchButton" title="Search" type="button">🔍</button>
-        <button class="icon-button" id="notificationsButton" title="Notifications" type="button">🔔</button>
-    </div>
+<div id="app">
+<header class="topbar">
+  <div class="brand">XN</div>
+  <div class="top-actions">
+    <button id="searchButton" class="circle-btn" type="button" aria-label="Search">🔍</button>
+    <button id="notificationsButton" class="circle-btn" type="button" aria-label="Notifications">🔔</button>
+    <button id="menuButton" class="circle-btn" type="button" aria-label="Menu">☰</button>
+  </div>
 </header>
-
-<section class="media-view" id="homeView">
-<main class="feed">
-    <section class="create-post">
-        <div class="create-post-top">
-            <div class="avatar">U</div>
-            <button class="post-input" id="openPostComposerButton" type="button">What's on your mind?</button>
-        </div>
-        <div class="post-actions">
-            <button class="post-action" id="photoPostButton" type="button">📷 Photo</button>
-            <button class="post-action" id="videoPostButton" type="button">🎥 Video</button>
-            <button class="post-action" id="textPostButton" type="button">✍️ Post</button>
-        </div>
+<main id="content">
+<section id="homeView" class="view">
+  <div class="feed">
+    <section class="composer-card">
+      <div class="composer-row"><img id="homeAvatar" class="avatar" src="" alt=""><button id="mindButton" class="mind" type="button">What's on your mind?</button></div>
+      <div class="composer-actions"><button id="photoButton" type="button">📷 Photo</button><button id="videoButton" type="button">🎥 Video</button><button id="textButton" type="button">✍️ Post</button></div>
     </section>
-
-    <section id="feedPosts" class="feed-posts">
-        <div class="empty-feed" id="emptyFeed">
-            <div class="empty-feed-icon">📰</div>
-            <h3>Your feed is empty</h3>
-            <p>Posts from people you follow will appear here.</p>
-        </div>
-    </section>
-</main>
+    <div id="feedList"></div>
+  </div>
 </section>
-
-<nav class="bottom-nav">
-    <button class="nav-button active" data-view="homeView" type="button"><span class="nav-icon">🏠</span>Home</button>
-    <button class="nav-button" data-view="reelsView" type="button"><span class="nav-icon">🎬</span>Reels</button>
-    <button class="nav-button" data-view="profileView" type="button"><span class="nav-icon">👤</span>Profile</button>
-</nav>
-
+<section id="reelsView" class="view hidden"><div class="feed"><div class="page-head"><h2>Reels</h2></div><div id="reelsList"></div></div></section>
+<section id="profileView" class="view hidden"><div class="feed"><div id="profilePanel"></div></div></section>
+<section id="friendsView" class="view hidden"><div class="feed"><div class="page-head"><button class="back" data-back>←</button><h2>Friends</h2></div><div id="friendsList"></div></div></section>
+<section id="photosView" class="view hidden"><div class="feed"><div class="page-head"><button class="back" data-back>←</button><h2>Photos</h2></div><div id="photosList"></div></div></section>
+<section id="searchView" class="view hidden"><div class="feed"><div class="search-head"><button class="back" data-back>←</button><input id="searchInput" placeholder="Search people..." autocomplete="off"></div><div id="searchResults"><div class="empty">Search for a person.</div></div></div></section>
+<section id="notificationsView" class="view hidden"><div class="feed"><div class="page-head"><button class="back" data-back>←</button><h2>Notifications</h2></div><div id="notificationsList"></div></div></section>
+<section id="settingsView" class="view hidden"><div class="feed"><div class="page-head"><button class="back" data-back>←</button><h2>Settings & privacy</h2></div><div id="settingsList"></div></div></section>
+</main>
+<nav class="bottom-nav"><button data-view="homeView">🏠<span>Home</span></button><button data-view="reelsView">🎬<span>Reels</span></button><button data-view="profileView">👤<span>Profile</span></button></nav>
+<aside id="menu" class="menu hidden">
+  <div class="menu-card"><div class="menu-title"><span>Xinon</span><button id="closeMenu" type="button">✕</button></div>
+    <button data-menu-view="profileView" type="button">👤 Profile</button><button data-menu-view="friendsView" type="button">👥 Friends</button><button data-menu-view="searchView" type="button">🔎 Search</button><button data-menu-view="notificationsView" type="button">🔔 Notifications</button><button data-menu-view="photosView" type="button">📷 Photos</button>
+    <hr><button type="button">📣 Create a Channel</button><button id="settingsButton" type="button">⚙️ Settings & privacy</button><button id="logoutButton" type="button">🚪 Log out</button>
+  </div>
+</aside>
+<div id="toast" class="toast hidden"></div>
 <script src="{{ url_for('static', filename='js/app.js') }}"></script>
-</body>
-</html>
+</body></html>
+    
