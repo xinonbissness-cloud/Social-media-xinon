@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Xinon Social — Notifications</title><link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"></head><body><header class="top-bar">
+<div class="top-logo">
+                XN
+            </div>
+<div class="top-actions">
+<button class="icon-button" id="searchButton" title="Search" type="button">
+                    🔍
+                </button>
+<button class="icon-button" id="notificationsButton" title="Notifications" type="button">
+                    🔔
+                </button>
+</div>
+</header><section class="media-view" id="notificationsView">
+<main class="feed utility-feed">
+<section class="utility-card">
+<div class="utility-header">
+<button class="utility-back-button" data-back-view="homeView" type="button">←</button>
+<div>
+<h2>Notifications</h2>
+<p>Your latest Xinon activity.</p>
+</div>
+</div>
+<div class="notification-list">
+<div class="notification-item">
+<div class="notification-icon">👋</div>
+<div><strong>Welcome to Xinon</strong><small>Your notifications will appear here.</small></div>
+</div>
+<div class="notification-item">
+<div class="notification-icon">👥</div>
+<div><strong>Friend requests</strong><small>New friend requests will appear here.</small></div>
+</div>
+<div class="notification-item">
+<div class="notification-icon">❤️</div>
+<div><strong>Reactions and comments</strong><small>Activity on your posts will appear here.</small></div>
+</div>
+</div>
+</section>
+</main>
+</section><nav class="bottom-nav">
+<button class="nav-button active" data-view="homeView" type="button">
+<span class="nav-icon">
+                    🏠
+                </span>
+
+                Home
+
+            </button>
+<button class="nav-button" data-view="reelsView" type="button">
+<span class="nav-icon">
+                    🎬
+                </span>
+
+                Reels
+
+            </button>
+<button class="nav-button" data-view="profileView" type="button">
+<span class="nav-icon">
+                    👤
+                </span>
+
+                Profile
+
+            </button>
+</nav><script src="{{ url_for('static', filename='js/app.js') }}"></script></body></html>

@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Xinon Social — Create Post</title><link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"></head><body><header class="top-bar">
+<div class="top-logo">
+                XN
+            </div>
+<div class="top-actions">
+<button class="icon-button" id="searchButton" title="Search" type="button">
+                    🔍
+                </button>
+<button class="icon-button" id="notificationsButton" title="Notifications" type="button">
+                    🔔
+                </button>
+</div>
+</header><section class="media-view" id="createPostView">
+<main class="feed utility-feed">
+<section class="utility-card composer-card">
+<div class="utility-header">
+<button class="utility-back-button" data-back-view="homeView" type="button">←</button>
+<div>
+<h2>Create post</h2>
+<p>Share something with your Xinon audience.</p>
+</div>
+</div>
+<textarea class="post-textarea" id="postTextInput" placeholder="What's on your mind?"></textarea>
+<div class="selected-media hidden" id="selectedMediaBox"></div>
+<div class="composer-tools">
+<button id="composerPhotoButton" type="button">📷 Photo</button>
+<button id="composerVideoButton" type="button">🎥 Video</button>
+</div>
+<button class="publish-button" id="publishPostButton" type="button">Publish Post</button>
+<input accept="image/*" hidden="" id="composerPhotoInput" type="file"/>
+<input accept="video/*" hidden="" id="composerVideoInput" type="file"/>
+<p class="utility-message" id="publishResult"></p>
+</section>
+</main>
+</section><nav class="bottom-nav">
+<button class="nav-button active" data-view="homeView" type="button">
+<span class="nav-icon">
+                    🏠
+                </span>
+
+                Home
+
+            </button>
+<button class="nav-button" data-view="reelsView" type="button">
+<span class="nav-icon">
+                    🎬
+                </span>
+
+                Reels
+
+            </button>
+<button class="nav-button" data-view="profileView" type="button">
+<span class="nav-icon">
+                    👤
+                </span>
+
+                Profile
+
+            </button>
+</nav><script src="{{ url_for('static', filename='js/app.js') }}"></script></body></html>

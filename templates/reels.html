@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Xinon Social — Reels</title><link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"></head><body><header class="top-bar">
+<div class="top-logo">
+                XN
+            </div>
+<div class="top-actions">
+<button class="icon-button" id="searchButton" title="Search" type="button">
+                    🔍
+                </button>
+<button class="icon-button" id="notificationsButton" title="Notifications" type="button">
+                    🔔
+                </button>
+</div>
+</header><section class="media-view" id="reelsView">
+<main class="reels-feed">
+<article class="reel-card">
+<div class="video-box">
+<div class="video-placeholder">
+<div class="play">
+                                ▶
+                            </div>
+<div class="video-label">
+                                Video / Reel
+                            </div>
+</div>
+</div>
+<div class="reel-info">
+<div class="reel-user">
+                            @username
+                        </div>
+<div class="reel-caption">
+                            This is a video caption for Xinon Social.
+                        </div>
+</div>
+<div class="reel-actions">
+<div class="reaction-menu hidden" data-reaction-menu="">
+<button class="reaction" data-reaction="😂" title="Haha" type="button">
+                                😂
+                            </button>
+<button class="reaction" data-reaction="😢" title="Sad" type="button">
+                                😢
+                            </button>
+<button class="reaction" data-reaction="😮" title="Wow" type="button">
+                                😮
+                            </button>
+<button class="reaction" data-reaction="🥰" title="Cute" type="button">
+                                🥰
+                            </button>
+<button class="reaction" data-reaction="❤️" title="Love" type="button">
+                                ❤️
+                            </button>
+<button class="reaction" data-reaction="😡" title="Angry" type="button">
+                                😡
+                            </button>
+</div>
+<button class="reel-action like-button" type="button">
+                            👍 Like
+                        </button>
+<button class="reel-action comment-button" type="button">
+                            💬 Comment
+                        </button>
+<button class="reel-action share-button" id="shareButton1" type="button">
+                            ↗️ Share
+                        </button>
+</div>
+<div class="comment-box">
+<input class="comment-input" placeholder="Write a comment..." type="text"/>
+<button class="comment-send" type="button">
+                            Send
+                        </button>
+</div>
+</article>
+<article class="reel-card">
+<div class="video-box">
+<div class="video-placeholder">
+<div class="play">
+                                ▶
+                            </div>
+<div class="video-label">
+                                Video / Reel
+                            </div>
+</div>
+</div>
+<div class="reel-info">
+<div class="reel-user">
+                            @another_user
+                        </div>
+<div class="reel-caption">
+                            Another video can appear here with its caption.
+                        </div>
+</div>
+<div class="reel-actions">
+<div class="reaction-menu hidden" data-reaction-menu="">
+<button class="reaction" data-reaction="😂" title="Haha" type="button">😂</button>
+<button class="reaction" data-reaction="😢" title="Sad" type="button">😢</button>
+<button class="reaction" data-reaction="😮" title="Wow" type="button">😮</button>
+<button class="reaction" data-reaction="🥰" title="Cute" type="button">🥰</button>
+<button class="reaction" data-reaction="❤️" title="Love" type="button">❤️</button>
+<button class="reaction" data-reaction="😡" title="Angry" type="button">😡</button>
+</div>
+<button class="reel-action like-button" type="button">
+                            👍 Like
+                        </button>
+<button class="reel-action comment-button" type="button">
+                            💬 Comment
+                        </button>
+<button class="reel-action share-button" id="shareButton2" type="button">
+                            ↗️ Share
+                        </button>
+</div>
+<div class="comment-box">
+<input class="comment-input" placeholder="Write a comment..." type="text"/>
+<button class="comment-send" type="button">
+                            Send
+                        </button>
+</div>
+</article>
+</main>
+</section><nav class="bottom-nav">
+<button class="nav-button active" data-view="homeView" type="button">
+<span class="nav-icon">
+                    🏠
+                </span>
+
+                Home
+
+            </button>
+<button class="nav-button" data-view="reelsView" type="button">
+<span class="nav-icon">
+                    🎬
+                </span>
+
+                Reels
+
+            </button>
+<button class="nav-button" data-view="profileView" type="button">
+<span class="nav-icon">
+                    👤
+                </span>
+
+                Profile
+
+            </button>
+</nav><script src="{{ url_for('static', filename='js/app.js') }}"></script></body></html>
