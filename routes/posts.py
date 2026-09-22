@@ -3,6 +3,7 @@ from flask import Blueprint, jsonify, request, Response
 from models.user import db, User
 from models.post import Post
 from models.media import PostMedia
+from models.share import PostShare
 
 posts_bp = Blueprint("posts", __name__)
 
@@ -69,6 +70,7 @@ def serialize_post(post):
         "created_at": post.created_at.isoformat(),
         "media_url": f"/api/posts/{post.id}/media" if media else None,
         "media_type": media.mime_type if media else None,
+        "share_count": PostShare.query.filter_by(post_id=post.id).count(),
         "user": {
             "id": post.user.id,
             "name": post.user.name,
@@ -90,4 +92,5 @@ def get_post_media(post_id):
         return jsonify({"error": "Media not found."}), 404
 
     return Response(media.data, mimetype=media.mime_type)
-            
+
+
