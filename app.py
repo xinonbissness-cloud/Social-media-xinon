@@ -6,6 +6,8 @@ from models.user import db
 from routes.auth import auth_bp
 from routes.posts import posts_bp
 from models.post import Post
+from models.media import ProfileMedia, PostMedia
+from routes.profile import profile_bp
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -13,6 +15,7 @@ CORS(app)
 db.init_app(app)
 app.register_blueprint(auth_bp, url_prefix="/api/auth")
 app.register_blueprint(posts_bp, url_prefix="/api")
+app.register_blueprint(profile_bp, url_prefix="/api")
 
 @app.route("/")
 def root():
